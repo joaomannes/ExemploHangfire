@@ -29,7 +29,10 @@ namespace ExemploHangfire.Worker.Config
 
         public static IApplicationBuilder UseHangfireConfig(this IApplicationBuilder app, IRecurringJobManager backgroundJobs, IConfiguration configuration)
         {
-            app.UseHangfireServer();
+            app.UseHangfireServer(new BackgroundJobServerOptions 
+            {
+                WorkerCount = 10
+            });
             app.UseHangfireDashboard();
 
             app.InitializeHangfireJobs(backgroundJobs, configuration);
@@ -39,7 +42,8 @@ namespace ExemploHangfire.Worker.Config
 
         public static IApplicationBuilder InitializeHangfireJobs(this IApplicationBuilder app, IRecurringJobManager backgroundJobs, IConfiguration configuration)
         {
-            backgroundJobs.AddOrUpdate<IExemploService>("Serviço de exemplo", service => service.Processar(), configuration.GetSection("Cron").Value, TimeZoneInfo.Local);
+            backgroundJobs.AddOrUpdate<IExemploService>("Serviço de exemplo Maximum", service => service.ProcessarMaximum(), configuration.GetSection("Cron").Value, TimeZoneInfo.Local);
+            backgroundJobs.AddOrUpdate<IExemploService>("Serviço de exemplo Disable", service => service.ProcessarDisable(), configuration.GetSection("Cron").Value, TimeZoneInfo.Local);
             return app;
         }
     }

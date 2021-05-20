@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Hangfire;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -8,9 +9,16 @@ namespace ExemploHangfire.Worker.Services
 {
     public class ExemploService : IExemploService
     {
-        public void Processar()
+        public void ProcessarDisable()
         {
-            Thread.Sleep(2000);
+            Console.WriteLine($"ProcessarDisable: {DateTime.Now}");
+            Thread.Sleep(120000);
+        }
+
+        public void ProcessarMaximum()
+        {
+            Console.WriteLine($"ProcessarMaximum: {DateTime.Now}");
+            Thread.Sleep(120000);
         }
     }
 }
